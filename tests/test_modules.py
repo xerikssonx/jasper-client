@@ -2,7 +2,7 @@
 # -*- coding: utf-8-*-
 import unittest
 from client import test_mic, diagnose, jasperpath
-from client.modules import Life, Joke, Time, Gmail, HN, News, Weather
+from client.modules import Life, Joke, Time, Gmail, HN, News, Weather, AlarmClock
 
 DEFAULT_PROFILE = {
     'prefers_email': False,
@@ -94,3 +94,10 @@ class TestModules(unittest.TestCase):
         outputs = self.runConversation(query, inputs, Weather)
         self.assertTrue("can't see that far ahead"
                         in outputs[0] or "Tomorrow" in outputs[0])
+
+    @unittest.skipIf(not diagnose.check_network_connection(),
+                         "No internet connection")
+    def testAlarm(self):
+        query = "alarm"
+        inputs = ["sixe five", "one threes", "ten twenty", "six seven", "one"]
+        outputs = self.runConversation(query, inputs, AlarmClock)
